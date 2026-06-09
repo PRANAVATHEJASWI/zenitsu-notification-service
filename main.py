@@ -13,7 +13,7 @@ app = FastAPI()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-RENDER_URL = "https://zenitsu-notify.onrender.com"
+RENDER_URL = "https://zenitsu-notification-service.onrender.com"
 
 
 # ─── Keep-Alive Background Thread ──────────────────────────────────────
