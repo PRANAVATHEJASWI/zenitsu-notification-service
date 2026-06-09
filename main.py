@@ -76,7 +76,7 @@ async def notify(request: Request):
         return JSONResponse({"error": str(e)}, status_code=500)
 
 
-@app.get("/", head_ok=True)
+@app.get("/")
 def root():
     """Root endpoint for UptimeRobot monitoring."""
     return {
@@ -85,7 +85,10 @@ def root():
         "endpoints": ["/health", "/wake", "/notify"]
     }
 
-
+@app.head("/")
+async def health_head():
+    return Response(status_code=200)
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=10000)
