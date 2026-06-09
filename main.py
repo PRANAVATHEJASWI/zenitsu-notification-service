@@ -76,7 +76,7 @@ async def notify(request: Request):
         return JSONResponse({"error": str(e)}, status_code=500)
 
 
-@app.get("/")
+@app.get("/", head_ok=True)
 def root():
     """Root endpoint for UptimeRobot monitoring."""
     return {
