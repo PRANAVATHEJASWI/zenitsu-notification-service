@@ -16,24 +16,39 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 RENDER_URL = "https://zenitsu-notification-service.onrender.com"
 
 
-# ─── Keep-Alive Background Thread ──────────────────────────────────────
+# ─── Keep-Alive Background Threads ────────────────────────────────────
 
-def keep_alive_loop():
-    """Ping self every 5 minutes to prevent Render sleep."""
+def keep_hf_spaces_alive():
+    """Ping HF Spaces every 5 minutes to prevent sleep."""
+    hf_url = "https://Pranavathejaswi-zenitsu-agent.hf.space/"
     while True:
         try:
-            response = requests.get(f"{RENDER_URL}/health", timeout=5)
-            print(f"[keep-alive] Ping successful: {response.status_code}")
+            r = requests.get(hf_url, timeout=10)
+            print(f"[keep-alive-hf] HF Spaces pinged: {r.status_code}")
         except Exception as e:
-            print(f"[keep-alive] Ping failed: {e}")
+            print(f"[keep-alive-hf] HF Spaces ping failed: {e}")
         time.sleep(300)  # 5 minutes
 
 
-# Start keep-alive thread on startup
-keep_alive_thread = threading.Thread(target=keep_alive_loop, daemon=True)
-keep_alive_thread.start()
-print("[startup] Keep-alive thread started")
+def keep_render_alive():
+    """Ping Render itself every 5 minutes to prevent sleep."""
+    while True:
+        try:
+            response = requests.get(f"{RENDER_URL}/health", timeout=5)
+            print(f"[keep-alive-render] Render pinged: {response.status_code}")
+        except Exception as e:
+            print(f"[keep-alive-render] Render ping failed: {e}")
+        time.sleep(300)  # 5 minutes
 
+
+# Start both threads on startup
+hf_thread = threading.Thread(target=keep_hf_spaces_alive, daemon=True)
+hf_thread.start()
+
+render_thread = threading.Thread(target=keep_render_alive, daemon=True)
+render_thread.start()
+
+print("[startup] Keep-alive threads started (HF + Render)")
 
 # ─── Endpoints ─────────────────────────────────────────────────────────
 
